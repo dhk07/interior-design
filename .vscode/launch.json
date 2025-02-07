@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-InteriorDesignApplication<Interior-design>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.madhurya.interiordesign.InteriorDesignApplication",
+            "projectName": "Interior-design",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

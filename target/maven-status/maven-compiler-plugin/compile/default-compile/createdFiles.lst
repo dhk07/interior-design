@@ -1,0 +1,6 @@
+com\madhurya\interiordesign\controller\AdminController.class
+com\madhurya\interiordesign\model\Gallery.class
+com\madhurya\interiordesign\InteriorDesignApplication.class
+com\madhurya\interiordesign\service\GalleryService.class
+com\madhurya\interiordesign\repository\GalleryRepository.class
+com\madhurya\interiordesign\controller\MainController.class

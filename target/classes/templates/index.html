@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Madhurya Innovations</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="active">Home</a>
+        <a href="/gallery">Gallery</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin" class="admin-btn">Admin Panel</a>
+    </nav>
+
+    <div class="container">
+        <div class="hero-section" style="background-image: url('/images/hero-bg.jpg')">
+            <h1>Welcome to Madhurya Innovations</h1>
+            <p class="subtitle">Transform your space with our expert interior design solutions</p>
+            <a href="/contact" class="cta-button">Get Started</a>
+        </div>
+
+        <!-- Featured Projects -->
+        <section class="featured-projects">
+            <h2>Featured Projects</h2>
+            <div class="featured-grid">
+                <div class="featured-item">
+                    <img src="/images/living-room.jpg" alt="Modern Living Room">
+                    <div class="featured-content">
+                        <h3>Modern Living Spaces</h3>
+                        <p>Contemporary designs for modern living</p>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img src="/images/kitchen.jpg" alt="Luxury Kitchen">
+                    <div class="featured-content">
+                        <h3>Luxury Kitchens</h3>
+                        <p>Where functionality meets elegance</p>
+                    </div>
+                </div>
+                <div class="featured-item">
+                    <img src="/images/bedroom.jpg" alt="Cozy Bedroom">
+                    <div class="featured-content">
+                        <h3>Peaceful Bedrooms</h3>
+                        <p>Your personal sanctuary</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="why-choose-us">
+            <h2>Why Choose Us</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Creative Design</h3>
+                    <p>Innovative solutions tailored to your style</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-clock"></i>
+                    <h3>On-Time Delivery</h3>
+                    <p>We value your time and commitments</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-star"></i>
+                    <h3>Quality Work</h3>
+                    <p>Premium materials and expert craftsmanship</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="quick-links">
+            <div class="quick-link-card">
+                <h2>Our Gallery</h2>
+                <p>Explore our portfolio of beautiful interior designs</p>
+                <a href="/gallery" class="button">View Gallery</a>
+            </div>
+
+            <div class="quick-link-card">
+                <h2>Contact Us</h2>
+                <p>Get in touch for a consultation</p>
+                <a href="/contact" class="button">Contact Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

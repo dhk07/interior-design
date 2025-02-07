@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard - Madhurya Innovations</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/">Home</a>
+        <a href="/gallery">Gallery</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin" class="active">Admin</a>
+    </nav>
+
+    <div class="container">
+        <div class="admin-header">
+            <h1><i class="fas fa-cog"></i> Admin Dashboard</h1>
+            <p>Manage your gallery images here</p>
+        </div>
+        
+        <!-- Display success/error messages -->
+        <div th:if="${message}" class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span th:text="${message}"></span>
+        </div>
+        <div th:if="${error}" class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <div class="admin-grid">
+            <!-- Upload Form Card -->
+            <div class="admin-card upload-form">
+                <div class="card-header">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h2>Upload New Image</h2>
+                </div>
+                <form action="/admin/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+                    <div class="form-group">
+                        <label for="file">
+                            <i class="fas fa-image"></i> Choose Image
+                        </label>
+                        <div class="file-input-container">
+                            <input type="file" id="file" name="file" accept="image/*" required>
+                            <label for="file" class="custom-file-input">
+                                <i class="fas fa-cloud-upload-alt"></i> Select Image
+                            </label>
+                        </div>
+                        <div id="file-preview" class="file-preview"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="title">
+                            <i class="fas fa-heading"></i> Title
+                        </label>
+                        <input type="text" id="title" name="title" placeholder="Enter image title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">
+                            <i class="fas fa-align-left"></i> Description
+                        </label>
+                        <textarea id="description" name="description" placeholder="Enter image description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category">
+                            <i class="fas fa-tag"></i> Category
+                        </label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="kitchen">Kitchen</option>
+                            <option value="bedroom">Bedroom</option>
+                            <option value="living">Living Room</option>
+                            <option value="bathroom">Bathroom</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-upload"></i> Upload Image
+                    </button>
+                </form>
+            </div>
+
+            <!-- Manage Images Card -->
+            <div class="admin-card gallery-management">
+                <div class="card-header">
+                    <i class="fas fa-images"></i>
+                    <h2>Manage Images</h2>
+                </div>
+                <div class="gallery-grid">
+                    <div th:each="image : ${images}" class="gallery-item">
+                        <div class="image-container">
+                            <img th:src="${image.fileName}" th:alt="${image.title}">
+                            <div class="image-overlay">
+                                <h3 th:text="${image.title}"></h3>
+                                <p th:text="${image.description}"></p>
+                                <form th:action="@{/admin/delete/{id}(id=${image.id})}" method="post">
+                                    <button type="submit" class="delete-btn">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission and refresh
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Image preview functionality
+        document.getElementById('file').addEventListener('change', function(e) {
+            const preview = document.getElementById('file-preview');
+            preview.innerHTML = '';
+            
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    preview.classList.add('has-image');
+                    preview.appendChild(img);
+                    
+                    // Add filename display
+                    const filename = document.createElement('div');
+                    filename.className = 'filename';
+                    filename.textContent = this.files[0].name;
+                    preview.appendChild(filename);
+                }
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                preview.classList.remove('has-image');
+                preview.innerHTML = '<i class="fas fa-image"></i> No image selected';
+            }
+        });
+    </script>
+</body>
+</html> 

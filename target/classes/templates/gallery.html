@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Madhurya Innovations</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/">Home</a>
+        <a href="/gallery" class="active">Gallery</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin" class="admin-btn">Admin Panel</a>
+    </nav>
+
+    <div class="container">
+        <h1>Our Work</h1>
+        
+        <!-- Category Tabs -->
+        <div class="category-tabs">
+            <button class="tab-btn active" onclick="filterCategory('all')">All</button>
+            <button class="tab-btn" onclick="filterCategory('kitchen')">Kitchen</button>
+            <button class="tab-btn" onclick="filterCategory('bedroom')">Bedroom</button>
+            <button class="tab-btn" onclick="filterCategory('living')">Living Room</button>
+            <button class="tab-btn" onclick="filterCategory('bathroom')">Bathroom</button>
+        </div>
+
+        <!-- Gallery sections by category -->
+        <div th:each="category : ${imagesByCategory}" th:id="${category.key}" class="category-section">
+            <h2 th:text="${#strings.capitalize(category.key)}">Category Name</h2>
+            <div class="gallery-grid">
+                <div th:each="image : ${category.value}" class="gallery-item">
+                    <img th:src="${image.fileName}" th:alt="${image.title}">
+                    <div class="gallery-item-info">
+                        <h3 th:text="${image.title}">Image Title</h3>
+                        <p th:text="${image.description}" class="image-description">Image Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show message if no images are available -->
+        <div th:if="${#maps.isEmpty(imagesByCategory)}" class="no-images">
+            <p>No images available in the gallery.</p>
+        </div>
+    </div>
+
+    <script>
+        function filterCategory(category) {
+            // Update active button
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(category)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Show/hide categories
+            document.querySelectorAll('.category-section').forEach(section => {
+                if (category === 'all' || section.id === category) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

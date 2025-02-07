@@ -1,0 +1,103 @@
+:root {
+    --primary-color: #0a5d2c;
+    --secondary-color: #d4b062;
+    --text-color: #ffffff;
+    --background-color: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: var(--background-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    text-align: center;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.main-content {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.services ul {
+    list-style-position: inside;
+    margin: 1rem 0;
+}
+
+.highlight {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 1rem;
+    text-align: center;
+    margin: 1rem 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.contact {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.contact-name {
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.contact-phone {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+.address, .email {
+    margin: 1rem 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .main-content, .contact {
+        padding: 1rem;
+    }
+} 
