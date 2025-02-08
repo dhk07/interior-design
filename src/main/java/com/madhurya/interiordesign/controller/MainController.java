@@ -8,11 +8,11 @@ public class MainController {
     
     @GetMapping("/")
     public String home() {
-        return "index";
+        return "home";
     }
 
     @GetMapping("/contact")
-    public String contact() {
+    public String showContactPage() {
         return "contact";
     }
 } 

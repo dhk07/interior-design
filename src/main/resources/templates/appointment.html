@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Madhurya Innovations</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            min-height: 100vh;
+        }
+
+        .appointment-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .appointment-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #1e3c72;
+            padding: 1rem;
+            position: relative;
+        }
+
+        .appointment-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 2px;
+        }
+
+        .appointment-header i {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .appointment-header h1 {
+            font-size: 2.5rem;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+
+        .appointment-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 2rem;
+            box-sizing: border-box;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: #1e3c72;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 60%;
+            transform: translateY(-50%);
+            color: #1e3c72;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .form-group input[type="text"] ~ .input-icon{
+            top: 60%;
+            transform: translateY(-50%);
+        }
+        
+        .form-group input[type="tel"] ~ .input-icon {
+            top: 60%;
+            transform: translateY(-50%);
+        }
+
+        .form-group select ~ .input-icon {
+            top: 60%;
+            transform: translateY(-50%);
+        }
+
+        .form-group textarea ~ .input-icon {
+            top: 45px;
+            transform: none;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8f5;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: #f8fafd;
+            color: #333;
+            box-sizing: border-box;
+            height: 52px;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            padding: 15px;
+            resize: vertical;
+            height: auto;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 4px rgba(30,60,114,0.1);
+            outline: none;
+            background-color: white;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #a0aec0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30,60,114,0.2);
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            margin: 1rem auto;
+            max-width: 800px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #ebf7ed;
+            color: #0d6832;
+            border: 1px solid #bae6c9;
+        }
+
+        .alert-error {
+            background-color: #fdf2f2;
+            color: #9b1c1c;
+            border: 1px solid #fbd5d5;
+        }
+
+        .alert i {
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .appointment-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .appointment-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 12px 12px 12px 45px;
+            }
+
+            .input-icon {
+                font-size: 1.1rem;
+                left: 15px;
+            }
+        }
+
+        /* Custom styles for datetime input */
+        input[type="datetime-local"] {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #f8fafd url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%231e3c72" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>') no-repeat 95% center;
+            cursor: pointer;
+            padding-right: 45px !important;
+        }
+
+        .form-group input[type="datetime-local"] ~ .input-icon {
+            top: 60%;
+            transform: translateY(-50%);
+        }
+
+        /* Remove all icon-related styles */
+        .input-icon,
+        .form-group input[type="text"] ~ .input-icon,
+        .form-group input[type="tel"] ~ .input-icon,
+        .form-group select ~ .input-icon,
+        .form-group textarea ~ .input-icon,
+        .form-group input[type="datetime-local"] ~ .input-icon {
+            display: none;
+        }
+
+        /* Add this new style for the admin button */
+        .navbar a.admin-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar a.admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/">Home</a>
+        <a href="/gallery">Gallery</a>
+        <a href="/contact">Contact</a>
+        <a href="/admin">Admin Panel</a>
+    </nav>
+
+    <div th:if="${success}" class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        <span th:text="${success}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-error">
+        <i class="fas fa-exclamation-circle"></i>
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="appointment-container">
+        <div class="appointment-header">
+            <i class="fas fa-calendar-check"></i>
+            <h1>Book an Appointment</h1>
+            <p>Schedule a consultation with our design experts</p>
+        </div>
+
+        <form action="/appointment/book" method="post">
+            <div class="form-group">
+                <label for="customerName">Full Name</label>
+                <input type="text" id="customerName" name="customerName" required placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="customerMobile">Mobile Number</label>
+                <input type="tel" id="customerMobile" name="customerMobile" required placeholder="Enter your mobile number">
+            </div>
+            
+            <div class="form-group">
+                <label for="propertyType">Property Type</label>
+                <select id="propertyType" name="propertyType" required onchange="toggleBhkSelect()">
+                    <option value="">Select Property Type</option>
+                    <option value="house">House</option>
+                    <option value="shop">Shop</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="bhkGroup" style="display: none;">
+                <label for="bhkType">BHK Type</label>
+                <select id="bhkType" name="bhkType">
+                    <option value="">Select BHK</option>
+                    <option value="1BHK">1 BHK</option>
+                    <option value="2BHK">2 BHK</option>
+                    <option value="3BHK">3 BHK</option>
+                    <option value="4BHK">4 BHK</option>
+                    <option value="5BHK">5 BHK</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="customerAddress">Address</label>
+                <textarea id="customerAddress" name="customerAddress" required placeholder="Enter your complete address"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="appointmentDateTime">Preferred Date & Time</label>
+                <input type="datetime-local" id="appointmentDateTime" name="appointmentDateTime" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">Book Appointment</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleBhkSelect() {
+            const propertyType = document.getElementById('propertyType').value;
+            const bhkGroup = document.getElementById('bhkGroup');
+            const bhkSelect = document.getElementById('bhkType');
+            
+            if (propertyType === 'house') {
+                bhkGroup.style.display = 'block';
+                bhkSelect.required = true;
+            } else {
+                bhkGroup.style.display = 'none';
+                bhkSelect.required = false;
+                bhkSelect.value = '';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,11 +1,5 @@
 package com.madhurya.interiordesign.service;
 
-import com.madhurya.interiordesign.model.Gallery;
-import com.madhurya.interiordesign.repository.GalleryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.madhurya.interiordesign.model.Gallery;
+import com.madhurya.interiordesign.repository.GalleryRepository;
+
 @Service
 public class GalleryService {
     
@@ -23,10 +25,15 @@ public class GalleryService {
 
     private final Path uploadPath;
 
-    public GalleryService() throws IOException {
-        // Initialize upload path in static/uploads directory
-        this.uploadPath = Paths.get(new ClassPathResource("static/uploads").getFile().getAbsolutePath());
-        Files.createDirectories(uploadPath);
+    public GalleryService(@Value("${upload.path}") String uploadPath) {
+        this.uploadPath = Paths.get(uploadPath);
+        
+        // Create directories if they don't exist
+        try {
+            Files.createDirectories(this.uploadPath);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create upload directory!", e);
+        }
     }
 
     public Gallery saveImage(MultipartFile file, String title, String description, String category) {
