@@ -5,6 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Madhurya Innovations</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .book-appointment-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .book-appointment-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .appointment-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 1rem;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+
+        #bhkGroup {
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -31,10 +139,12 @@
             <h2 th:text="${#strings.capitalize(category.key)}">Category Name</h2>
             <div class="gallery-grid">
                 <div th:each="image : ${category.value}" class="gallery-item">
-                    <img th:src="${image.fileName}" th:alt="${image.title}">
-                    <div class="gallery-item-info">
-                        <h3 th:text="${image.title}">Image Title</h3>
-                        <p th:text="${image.description}" class="image-description">Image Description</p>
+                    <div class="image-container">
+                        <img th:src="${image.fileName}" th:alt="${image.title}">
+                        <div class="image-overlay">
+                            <h3 th:text="${image.title}"></h3>
+                            <p th:text="${image.description}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,6 +153,58 @@
         <!-- Show message if no images are available -->
         <div th:if="${#maps.isEmpty(imagesByCategory)}" class="no-images">
             <p>No images available in the gallery.</p>
+        </div>
+    </div>
+
+    <!-- Add this after the container -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Book an Appointment</h2>
+            <form id="appointmentForm" action="/appointment/book" method="post">
+                <div class="form-group">
+                    <label for="customerName">Name:</label>
+                    <input type="text" id="customerName" name="customerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerMobile">Mobile:</label>
+                    <input type="tel" id="customerMobile" name="customerMobile" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyType">Property Type:</label>
+                    <select id="propertyType" name="propertyType" required onchange="toggleBhkSelect()">
+                        <option value="">Select Property Type</option>
+                        <option value="house">House</option>
+                        <option value="shop">Shop</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="bhkGroup" style="display: none;">
+                    <label for="bhkType">BHK Type:</label>
+                    <select id="bhkType" name="bhkType">
+                        <option value="">Select BHK</option>
+                        <option value="1BHK">1 BHK</option>
+                        <option value="2BHK">2 BHK</option>
+                        <option value="3BHK">3 BHK</option>
+                        <option value="4BHK">4 BHK</option>
+                        <option value="5BHK">5 BHK</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerAddress">Address:</label>
+                    <textarea id="customerAddress" name="customerAddress" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentDateTime">Preferred Date & Time:</label>
+                    <input type="datetime-local" id="appointmentDateTime" name="appointmentDateTime" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Book Appointment</button>
+            </form>
         </div>
     </div>
 
@@ -64,6 +226,68 @@
                     section.style.display = 'none';
                 }
             });
+        }
+
+        // Get the modal
+        var modal = document.getElementById("appointmentModal");
+        var btn = document.getElementById("bookAppointmentBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        // Open modal
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Close modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Form submission
+        document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            fetch('/appointment/book', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    alert('Appointment booked successfully!');
+                    modal.style.display = "none";
+                    this.reset();
+                } else {
+                    alert('Failed to book appointment. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+
+        function toggleBhkSelect() {
+            const propertyType = document.getElementById('propertyType').value;
+            const bhkGroup = document.getElementById('bhkGroup');
+            const bhkSelect = document.getElementById('bhkType');
+            
+            if (propertyType === 'house') {
+                bhkGroup.style.display = 'block';
+                bhkSelect.required = true;
+            } else {
+                bhkGroup.style.display = 'none';
+                bhkSelect.required = false;
+                bhkSelect.value = '';
+            }
         }
     </script>
 </body>
